@@ -1,12 +1,32 @@
 const express = require('express');
 const mysql = require('mysql');
-const jwt = require('jsonwebtoken');
 const secret = "private";
 const router = express.Router();
 
 //Get 
-router.get('/',authenticateToken,(req,res) =>{
-    res.send("sad");
+router.get('/', async(req,res) =>{
+    var db =  mysql.createConnection({
+        host        : 'localhost',
+        user        : 'root',
+        password    : '1234',
+        database    : 'foodorder'
+    });
+    await db.connect((error) => {
+        if(error){
+            throw error;
+        }
+    });
+    let sql = `SELECT * from course `;        
+    await db.query(sql,(error,result) => {
+        if(error) throw error;
+        
+        if(result.length > 0){
+
+            res.send(result);
+
+        }else res.status(401).json({error: "Error"});
+    });    
+    db.end();
 });
 //Post
 router.post('/',async (req,res) =>{
