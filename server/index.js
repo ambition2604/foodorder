@@ -9,9 +9,10 @@ app.use(cors());
 
 
 const login = require('./routers/api/login');
+const course = require('./routers/api/course');
 
 
-app.use('/api/login',login);
+app.use('/api/course',course);
 
  const port = process.env.PORT || 3000;
 
