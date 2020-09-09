@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const secret = "private";
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 //Post
@@ -24,7 +25,7 @@ router.post('/',async (req,res) =>{
         
         if(result.length > 0){
             const token=jwt.sign({username},secret,(error,token) => {
-                res.header("auth-token", token).send(token);
+            res.header("auth-token", token).send(token);
         });
         
         }else res.status(401).json({error: "Error"});
