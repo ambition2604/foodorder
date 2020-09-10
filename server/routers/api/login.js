@@ -25,7 +25,7 @@ router.post('/',async (req,res) =>{
         
         if(result.length > 0){
             const token=jwt.sign({username},secret,(error,token) => {
-            res.header("auth-token", token).send(token);
+            res.send(token);
         });
         
         }else res.status(401).json({error: "Error"});
@@ -33,7 +33,7 @@ router.post('/',async (req,res) =>{
     db.end();
 });
 function authenticateToken(req, res, next) {
-    const token = req.headers['auth-token'];
+    const token = req.headers['token'];
 
     if(token == null) return res.sendStatus(401);
 
