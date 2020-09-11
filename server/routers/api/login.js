@@ -32,15 +32,25 @@ router.post('/',async (req,res) =>{
     });    
     db.end();
 });
-function authenticateToken(req, res, next) {
-    const token = req.headers['token'];
-
-    if(token == null) return res.sendStatus(401);
-
-    jwt.verify(token,'private',(error,username) =>{
-        if(error)   return res.sendStatus(403);
-        req.username = username;
-        next();
+router.post('/',async (req,res) =>{
+    var token = req.body.token;
+    var db =  mysql.createConnection({
+        host        : 'localhost',
+        user        : 'root',
+        password    : '1234',
+        database    : 'foodorder'
     });
-};
+    await db.connect((error) => {
+        if(error){
+            throw error;
+        }
+    });
+    if(token == null) return res.sendStatus(401);
+    jwt.verify(token,'private',(error) =>{
+        if(error)  res.send('Failed');
+        return res.sendStatus(403);
+    });
+    db.end();
+});
+
 module.exports = router;
