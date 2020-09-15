@@ -15,7 +15,7 @@ router.get('/', async(req,res) =>{
             throw error;
         }
     });
-    let sql = `SELECT * from shop `;        
+    let sql = `SELECT * from item `;        
     await db.query(sql,(error,result) => {
         if(error) throw error;
         
@@ -27,8 +27,8 @@ router.get('/', async(req,res) =>{
     });    
     db.end();
 });
-router.post('/id', async(req,res) =>{
-    var shop_id = req.body.shop_id;
+router.post('/menu_id', async(req,res) =>{
+    var menu_id = req.body.menu_id;
     var db =  mysql.createConnection({
         host        : 'localhost',
         user        : 'root',
@@ -40,7 +40,7 @@ router.post('/id', async(req,res) =>{
             throw error;
         }
     });
-    let sql = `SELECT * FROM shop WHERE id = '${shop_id}'`;        
+    let sql = `SELECT * from item WHERE menu_id = '${menu_id}'`;        
     await db.query(sql,(error,result) => {
         if(error) throw error;
         
