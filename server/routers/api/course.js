@@ -15,7 +15,7 @@ router.post('/', async(req,res) =>{
             throw error;
         }
     });
-    let sql = `SELECT * from course`;        
+    let sql = `SELECT * ,shop.name,shop.phone,users.username FROM course inner join shop on shop.id  = course.shop_id inner join users on course.host_id = users.id`;        
     await db.query(sql,(error,result) => {
         if(error) throw error;
         
@@ -43,7 +43,7 @@ router.post('/id', async(req,res) =>{
             throw error;
         }
     });
-    let sql = `SELECT * from course WHERE host_id = '${host_id}'`;        
+    let sql = `SELECT * ,shop.name,shop.phone FROM course inner join shop on shop.id  = course.shop_id having course.host_id = '${host_id}'`;        
     await db.query(sql,(error,result) => {
         if(error) throw error;
         

@@ -29,6 +29,7 @@ router.get('/', async(req,res) =>{
 });
 router.post('/menu_id', async(req,res) =>{
     var menu_id = req.body.menu_id;
+    var items = req.body.items;
     var db =  mysql.createConnection({
         host        : 'localhost',
         user        : 'root',
@@ -45,7 +46,43 @@ router.post('/menu_id', async(req,res) =>{
         if(error) throw error;
         
         if(result.length > 0){
+            for (let i = 0; i < result.length; i++) {
+                result[i].quantity = null;
+                if(items.length > 0){
+                    for (let j = 0; j < items.length; j++) {
+                        if(items[j].id == result[i].id){
+                            result[i].quantity = null;
+                                 result[i].quantity = items[j].quantity;
+                        }   
+                    }
+                }      
+            }
+            res.send(result);
 
+        }else res.status(401).json({error: "Error"});
+    });    
+    db.end();
+});
+router.post('/menus_id', async(req,res) =>{
+    var menu_id = req.body.menu_id;
+    var items = req.body.items;
+    var db =  mysql.createConnection({
+        host        : 'localhost',
+        user        : 'root',
+        password    : '1234',
+        database    : 'foodorder'
+    });
+    await db.connect((error) => {
+        if(error){
+            throw error;
+        }
+    });
+    let sql = `SELECT * from item WHERE menu_id = '${menu_id}'`;        
+    await db.query(sql,(error,result) => {
+        if(error) throw error;
+    
+        if(result.length > 0){
+        
             res.send(result);
 
         }else res.status(401).json({error: "Error"});
