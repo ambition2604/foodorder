@@ -15,7 +15,7 @@ router.post('/', async(req,res) =>{
             throw error;
         }
     });
-    let sql = `SELECT * ,shop.name,shop.phone,users.username FROM course inner join shop on shop.id  = course.shop_id inner join users on course.host_id = users.id`;        
+    let sql = `SELECT users.username,course.title,course.id,course.shop_id,shop.name,shop.phone,users.username FROM course inner join shop on shop.id  = course.shop_id inner join users on course.host_id = users.id`;        
     await db.query(sql,(error,result) => {
         if(error) throw error;
         

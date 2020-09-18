@@ -30,6 +30,7 @@ router.get('/', async(req,res) =>{
 router.post('/menu_id', async(req,res) =>{
     var menu_id = req.body.menu_id;
     var items = req.body.items;
+    var course_id = req.body.course_id;
     var db =  mysql.createConnection({
         host        : 'localhost',
         user        : 'root',
@@ -48,11 +49,12 @@ router.post('/menu_id', async(req,res) =>{
         if(result.length > 0){
             for (let i = 0; i < result.length; i++) {
                 result[i].quantity = null;
+                result[i].course_id = course_id;
                 if(items.length > 0){
                     for (let j = 0; j < items.length; j++) {
-                        if(items[j].id == result[i].id){
-                            result[i].quantity = null;
-                                 result[i].quantity = items[j].quantity;
+                        if(items[j].id == result[i].id && items[j].course_id == result[i].course_id ){
+                                result[i].quantity = null;
+                                result[i].quantity = items[j].quantity;         
                         }   
                     }
                 }      
@@ -65,7 +67,7 @@ router.post('/menu_id', async(req,res) =>{
 });
 router.post('/menus_id', async(req,res) =>{
     var menu_id = req.body.menu_id;
-    var items = req.body.items;
+    var course_id = req.body.course_id;
     var db =  mysql.createConnection({
         host        : 'localhost',
         user        : 'root',
@@ -82,7 +84,9 @@ router.post('/menus_id', async(req,res) =>{
         if(error) throw error;
     
         if(result.length > 0){
-        
+            result.forEach(element => {
+                element.course_id = course_id;
+            });
             res.send(result);
 
         }else res.status(401).json({error: "Error"});
